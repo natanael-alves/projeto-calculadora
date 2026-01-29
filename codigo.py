@@ -18,29 +18,58 @@ def exibir_menu():
     print("4 - Divisão")
     print("0 - Sair")
 
-resultado_atual = float(input("Digite o valor inicial: "))
-
-while  True:
-    print(f"Resultado atual: {resultado_atual}")
-
-    exibir_menu()
-
-    opcao_escolhida = input("Escolha uma opção: ")
-
-    if opcao_escolhida == "0": 
-        break
-
-    valor_operando = float(input("Digite o valor do operando: "))
-
-    if opcao_escolhida == "1":
-        resultado_atual = soma(resultado_atual, valor_operando)
-    elif opcao_escolhida == "2":
-        resultado_atual = subtracao(resultado_atual, valor_operando)
-    elif opcao_escolhida == "3":
-        resultado_atual = multiplicacao(resultado_atual, valor_operando)
-    elif opcao_escolhida == "4":
-        resultado_atual = divisao(resultado_atual, valor_operando)
-
+def formatar_resultado(resultado):
+    if resultado.is_integer():
+        resultado_convertido = int(resultado)
+        return resultado_convertido
     
+    return resultado
+
+def main():
+
+    opcaoes_validas = {"1", "2", "3", "4", "0"}
+
+    try:
+        resultado_atual = float(input("Digite o valor inicial: "))
+    except ValueError:
+        print("Valor inicial inválido.")
+        return
+
+    while  True:
+        resultado_formatado = formatar_resultado(resultado_atual)
+        print(f"Resultado atual: {resultado_formatado}")
+        exibir_menu()
+
+        opcao_escolhida = input("Escolha uma opção: ")
+
+        if opcao_escolhida == "0": 
+            break
+
+        if opcao_escolhida not in opcaoes_validas:
+            print("\nOpção inválida.")
+            print("Opções válidas: 1, 2, 3, 4 e 0\n")
+
+            continue
+        
+        try:
+            valor_operando = float(input("Digite o valor do operando: "))
+        except ValueError:
+            print("Número inválido")
+
+            continue
+
+        if opcao_escolhida == "1":
+            resultado_atual = soma(resultado_atual, valor_operando)
+        elif opcao_escolhida == "2":
+            resultado_atual = subtracao(resultado_atual, valor_operando)
+        elif opcao_escolhida == "3":
+            resultado_atual = multiplicacao(resultado_atual, valor_operando)
+        elif opcao_escolhida == "4":
+            try:
+                resultado_atual = divisao(resultado_atual, valor_operando)
+            except ZeroDivisionError:
+                print("Não se pode dividir por zero.")
 
     print("Encerrando a calculadora. Até mais! ")
+
+main()
